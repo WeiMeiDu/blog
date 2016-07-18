@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
+http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+
+<!-- fck加载本地图片，图片上传成功后会生成userfiles文件夹，下面有四个文件夹
+	上传中文名的文件，会出现乱码
+ -->
+<servlet>
+	<servlet-name>Connector</servlet-name>
+	<servlet-class>
+		com.blog.fckeditor.ConnectorServlet
+	</servlet-class>
+	<load-on-startup>1</load-on-startup>
+	
+</servlet>
+<servlet-mapping>
+	<servlet-name>Connector</servlet-name>
+	<url-pattern>
+		/user/fckeditor/editor/filemanager/connectors/*
+	</url-pattern>
+</servlet-mapping>
+
+
+
+<filter>
+	<filter-name>struts2</filter-name> 
+	<filter-class>org.apache.struts2.dispatcher.FilterDispatcher</filter-class><!-- 中央控制器，核心控制器 -->
+</filter>
+<filter-mapping>
+	<filter-name>struts2</filter-name>
+	<url-pattern>*.action</url-pattern>
+</filter-mapping>
+<filter-mapping>
+	<filter-name>struts2</filter-name>
+	<url-pattern>*.jsp</url-pattern>
+	<!-- 对所有的action和jsp都会进行过滤，而Servlet不会 -->
+</filter-mapping>
+
+<listener>
+	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+</listener>
+
+</web-app>

@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+
+<struts>
+	<constant name="struts.i18n.encoding" value="gb2312"></constant>
+	<constant name="struts.custom.i18n.resources" value="myMessage"></constant>
+	<package name="struts2" extends="struts-default">
+	<!-- 定义一个拦截器 -->
+	<interceptors>
+		<interceptor name="userInterceptor" class="com.blog.interceptor.UserInterceptor"></interceptor>
+	</interceptors>
+		<!-- <action name="register" class="com.blog.action.Register"> -->
+		<action name="register" class="registerAction"><!-- 在spring声明了，class改为spring中bean名 -->
+			<result name="success">/success.jsp</result>
+			<result name="error">/error.jsp</result>
+			<result name="input">/register.jsp</result>
+		</action>
+		
+		<action name="login" class="loginAction"><!-- 在spring声明了，class改为spring中bean名 -->
+			<result name="success">/success.jsp</result>
+			<result name="error">/error.jsp</result>
+			<result name="input">/login.jsp</result>
+		</action>
+		
+		<action name="editBlogInfo" class="editBlogInfoAction" >
+			<result name="success" type="chain">getBlogInfo</result>
+			<result name="error">/error.jsp</result>
+			<result name="input">/user/editbloginfo.jsp</result>
+		</action>
+		<action name="getBlogInfo" class="getBlogInfoAction" >
+			<result name="success">/user/editbloginfo.jsp</result>
+			<result name="error">/error.jsp</result>
+		</action>
+		<action name="addArticle" class="addArticleAction" >
+			<result name="success" type="chain">showUserAllArticle</result>
+			<result name="error">/error.jsp</result>
+			<result name="login" type="redirect">/login.jsp</result>
+			<!-- 使用自定义拦截器 -->
+			<interceptor-ref name="userInterceptor"></interceptor-ref>
+			<!-- 默认拦截器 -->
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+		</action>
+		
+		<action name="showUserAllArticle" class="showUserAllArticleAction" >
+			<result name="success">/user/showUserAllArticle.jsp</result>
+		</action>
+		<action name="showAllArticle" class="showAllArticleAction" >
+			<result name="success">/showAllArticle.jsp</result>
+		</action>
+		<action name="showArticle" class="showArticleAction" >
+			<result name="success">/user/showArticle.jsp</result>
+		</action>
+		<action name="addCritique" class="addCritiqueAction" >
+			<result name="success" type="chain">showArticle</result>
+		</action>
+		<action name="photoUpload" class="com.blog.action.PhotoUpload" >
+			<result name="success" type="chain">showPhoto</result>
+			<result name="input">/user/showphoto.jsp</result>
+			<!-- 配置fileUpload拦截器 -->
+			<interceptor-ref name="fileUpload">
+				<!-- 配置允许上传文件类型 -->
+				<param name="allowerTypes">image/bmp,image/pjpeg,image/png,image/gif</param>
+				<!-- 配置允许上传文件大小最大值 -->
+				<!-- <param name="maximumSize">51200</param> -->
+			</interceptor-ref>
+			<result name="login" type="redirect">/login.jsp</result>
+			<!-- 使用自定义拦截器 -->
+			<interceptor-ref name="userInterceptor"></interceptor-ref>
+			<!-- 默认拦截器 -->
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+		</action>
+		<action name="showPhoto" class="com.blog.action.ShowPhoto" >
+			<result name="success">/user/showphoto.jsp</result>
+		</action>
+		<action name="showRSS" class="showRssAction" >
+			<result name="success">/rss.xml</result>
+		</action>
+		
+	</package>
+</struts>
